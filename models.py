@@ -9,7 +9,8 @@ from mongoengine.fields import (
 
 class Article(Document):
     meta = {"collection": "Scraping_collection_predicted"}
-
+    link = StringField()
     text = StringField()
     date = DateTimeField()
+    source = StringField()
     prediction = StringField()

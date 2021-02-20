@@ -17,26 +17,25 @@ import pickle
 
 warnings.filterwarnings('ignore')
 
-
+#l'entrainement de model
 def train_model():
-    news = pd.read_csv('./input/fake_or_real_news.csv')
-
+    data = pd.read_csv('./input/fake_or_real_news.csv')
     x_train, x_test, y_train, y_test = train_test_split(
-        news['text'], news['label'], test_size=0.1)
-
+        data['text'], data['label'], test_size=0.1)
+    #pour vectorizer les donneés pour mieux entrainement
     tfidf = TfidfVectorizer(stop_words='english', max_df=0.8)
     x_train = tfidf.fit_transform(x_train)
     x_test = tfidf.transform(x_test)
-
+    #l'appel de generation d'un fichier bin pour eviter la répetition d'appel de fonction
     with open("tfidf.bin", 'wb') as f_out:
         pickle.dump(tfidf, f_out)
         f_out.close()
-
+    #notre model a choix de 70% accuracy
     model = PassiveAggressiveClassifier(max_iter=300)
     model.fit(x_train, y_train)
     return model
 
-
+#la prediction des article ajouter par l'utilisateur
 def predict_article(article):
     with open('fakenews_model.bin', 'rb') as f_in:
         model = pickle.load(f_in)
