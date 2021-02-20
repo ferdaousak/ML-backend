@@ -3,8 +3,9 @@ import json
 from fakenews_model import predict_article
 from fakenews_model import train_model
 from scraping import Scraping
+from scraping_train import scrapTrain
 from nlp import tokenize, pos_tag, rm_stop_words, bag_of_words, lemmatization, stemming, tfidf
-from db import user_collection, scraping_collection
+from db import user_collection, scraping_collection, scraping_collection_original
 from textblob import TextBlob
 import re
 from json import JSONEncoder
@@ -72,21 +73,18 @@ def emotion():
 
     return response
 
-
-@app.route('/scrap', methods=['POST'])
-def add():
+@app.route('/scrap_train', methods=['POST'])
+def loadscrap():
     _json = request.get_json(force=True)
-    if not "de" in _json or not "a" in _json:
+    if not "number" in _json:
         return not_found()
-    de = _json['de']
-    a = _json['a']
-    rows = Scraping(de, a)
+    number = _json['number']
+    rows = scrapTrain(number)
     for row in rows:
         regex = re.compile('[^a-z A-Z,?/!\ ]')
-        row['title'] = regex.sub('', row['title'])
         row['text'] = regex.sub('', row['text'])
-        scraping_collection.insert(
-            {'link': row['link'], 'title': row['title'], 'text': row['text']})
+        scraping_collection_original.insert(
+                {'text': row['text'], 'label': row['label']})
     response = jsonify({"success": True, "data": "scrapted"})
     return response
 

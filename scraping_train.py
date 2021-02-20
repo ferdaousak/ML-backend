@@ -38,7 +38,8 @@ def scrapTrain(numberOfpages):
             Statement = j.find("div",attrs={'class':'m-statement__quote'}).text.strip()
             Label = j.find('div', attrs ={'class':'m-statement__content'}).find('img',attrs={'class':'c-image__original'}).get('alt').strip()
             if (Label =='true') or (Label =='false'):
-                frame.append((Statement,Label))
+                row= {"text": Statement, "label": Label}
+                frame.append(row)
     
     data= pd.DataFrame.from_dict(frame)
     data.to_csv("./data.csv",index=False)
