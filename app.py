@@ -87,11 +87,6 @@ def add():
         row['text'] = regex.sub('', row['text'])
         scraping_collection.insert(
             {'link': row['link'], 'title': row['title'], 'text': row['text']})
-        row['title'] = regex.sub('', row['title'])
-        row['text'] = regex.sub('', row['text'])
-        scraping_collection.insert(
-            {'link': row['link'], 'title': row['title'], 'text': row['text']})
-
     response = jsonify({"success": True, "data": "scrapted"})
     return response
 
