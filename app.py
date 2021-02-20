@@ -5,7 +5,7 @@ from fakenews_model import train_model
 from scraping import Scraping
 from scraping_train import scrapTrain
 from nlp import tokenize, pos_tag, rm_stop_words, bag_of_words, lemmatization, stemming, tfidf
-from db import user_collection, scraping_collection, scraping_collection_original
+from db import user_collection, scraping_collection, scraping_collection_original, scraping_collection_predectid
 from textblob import TextBlob
 import re
 from json import JSONEncoder
@@ -14,6 +14,9 @@ from bson.json_util import dumps
 from bson.objectid import ObjectId
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from schema import schema
+from datetime import datetime
+from flask_graphql import GraphQLView
 app = Flask(__name__)
 
 CORS(app)
@@ -81,17 +84,31 @@ def loadscrap():
     number = _json['number']
     rows = scrapTrain(number)
     for row in rows:
-        regex = re.compile('[^a-z A-Z,?/!\ ]')
-        row['text'] = regex.sub('', row['text'])
         scraping_collection_original.insert(
                 {'text': row['text'], 'label': row['label']})
     response = jsonify({"success": True, "data": "scrapted"})
     return response
 
+@app.route('/scrap_predict', methods=['POST'])
+def add():
+    _json = request.get_json(force=True)
+    if not "number" in _json:
+        return not_found()
+    number = _json['number']
+    rows = scrapTrain(number)
+    for row in rows:
+        scraping_collection_predectid.insert({
+            'text': row['text'],
+            'date': datetime.now(),
+            'prediction': predict_article(row['text'])
+        })
+
+    response = jsonify({"success": True, "data": "scrapted"})
+    return response
 
 @app.route('/data', methods=['GET'])
 def get_all_data():
-    data = user_collection.find()
+    data = scraping_collection.find()
     resp = dumps(data)
     return resp
 
@@ -145,6 +162,10 @@ def not_found(error=None):
     resp.status_code = 404
 
     return resp
+
+
+app.add_url_rule(
+    '/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
 
 
 if __name__ == '__main__':
