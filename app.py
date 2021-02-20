@@ -108,37 +108,8 @@ def add():
 
 @app.route('/data', methods=['GET'])
 def get_all_data():
-    data = scraping_collection.find()
+    data = scraping_collection_predectid.find()
     resp = dumps(data)
-    return resp
-
-
-@app.route('/data/<id>', methods=['GET'])
-def get_data(id):
-    data = user_collection.find_one({'_id': ObjectId(id)})
-    resp = dumps(data)
-    return resp
-
-
-@app.route('/data', methods=['POST'])
-def save_new_data():
-    _json = request.get_json(force=True)
-    print(_json)
-    _name = _json['name']
-    if _name and request.method == 'POST':
-        user_collection.insert_one({"name": _name})
-        resp = jsonify('Data added successfully!')
-        resp.status_code = 200
-        return resp
-    else:
-        return not_found()
-
-
-@app.route('/data/<id>', methods=['DELETE'])
-def delete_user(id):
-    user_collection.delete_one({'_id': ObjectId(id)})
-    resp = jsonify('Data deleted successfully!')
-    resp.status_code = 200
     return resp
 
 
