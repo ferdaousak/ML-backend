@@ -7,9 +7,8 @@ CONNECTION_STRING = "mongodb+srv://"+user+":"+password+"@cluster0.lbaun.mongodb.
 client = pymongo.MongoClient(CONNECTION_STRING)
 db = client.get_database('flask_project')
 user_collection = pymongo.collection.Collection(db, 'user_collection')
-scraping_collection = pymongo.collection.Collection(db, 'Scraping_collection')
-scraping_collection_original = pymongo.collection.Collection(db, 'scraping_collection_original')
-scraping_collection_predectid = pymongo.collection.Collection(db, 'scraping_collection_predicted')
+scraping_collection_train = pymongo.collection.Collection(db, 'Scraping_collection_train')
+scraping_collection_predectid = pymongo.collection.Collection(db, 'Scraping_collection_predicted')
 
 
 
