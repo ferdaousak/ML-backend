@@ -35,10 +35,13 @@ def scrapTrain(numberOfpages):
         print(len(links))
 
         for j in links:
+            Link = "https://www.politifact.com"
+            Link += j.find("div",attrs={'class':'m-statement__quote'}).find('a')['href'].strip()
             Statement = j.find("div",attrs={'class':'m-statement__quote'}).text.strip()
             Label = j.find('div', attrs ={'class':'m-statement__content'}).find('img',attrs={'class':'c-image__original'}).get('alt').strip()
+            Source = j.find('div', attrs={'class':'m-statement__meta'}).find('a').text.strip()
             if (Label =='true') or (Label =='false'):
-                row= {"text": Statement, "label": Label}
+                row= {"text": Statement, "label": Label, "link":Link, "source":Source}
                 frame.append(row)
     
     data= pd.DataFrame.from_dict(frame)

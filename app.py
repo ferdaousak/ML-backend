@@ -85,7 +85,7 @@ def loadscrap():
     rows = scrapTrain(number)
     for row in rows:
         scraping_collection_train.insert(
-                {'text': row['text'], 'label': row['label']})
+                {'link':row['link'], 'text': row['text'],'source': row['source'], 'label': row['label']})
     response = jsonify({"success": True, "data": "scrapted"})
     return response
 
@@ -98,7 +98,9 @@ def add():
     rows = scrapTrain(number)
     for row in rows:
         scraping_collection_predectid.insert({
+            'link':row['link'],
             'text': row['text'],
+            'source': row['source'],
             'date': datetime.now(),
             'prediction': predict_article(row['text'])
         })
