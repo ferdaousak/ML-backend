@@ -44,15 +44,6 @@ def process_text():
         result = stemming(text)
     elif method == "bag_of_words":  # expecting an array of texts
         result = bag_of_words(text)
-        result = tfidf(text)
-    elif method == "stemming":
-        result = stemming(text)
-    elif method == "bag_of_words":  # expecting an array of texts
-        result = bag_of_words(text)
-    elif method == "stemming":
-        result = stemming(text)
-    elif method == "bag_of_words":  # expecting an array of texts
-        result = bag_of_words(text)
     response = jsonify({"data": result})
     return response
 
