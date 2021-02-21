@@ -2,10 +2,9 @@ import codecs
 import json
 from fakenews_model import predict_article
 from fakenews_model import train_model
-from scraping import Scraping
 from scraping_train import scrapTrain
 from nlp import tokenize, pos_tag, rm_stop_words, bag_of_words, lemmatization, stemming, tfidf
-from db import user_collection, scraping_collection_train, scraping_collection_predectid
+from db import scraping_collection_train, scraping_collection_predectid
 from textblob import TextBlob
 import re
 from json import JSONEncoder

@@ -40,10 +40,14 @@ def scrapTrain(numberOfpages):
             Statement = j.find("div",attrs={'class':'m-statement__quote'}).text.strip()
             Label = j.find('div', attrs ={'class':'m-statement__content'}).find('img',attrs={'class':'c-image__original'}).get('alt').strip()
             Source = j.find('div', attrs={'class':'m-statement__meta'}).find('a').text.strip()
-            if (Label =='true') or (Label =='false'):
-                row= {"text": Statement, "label": Label, "link":Link, "source":Source}
+            if (Label =='true'):
+                Label = 'REAL'
+            elif (Label =='false'):
+                Label ='FAKE'
+            if(Label == 'REAL') or (Label == 'FAKE'):
+                row= {"text": Statement, "link":Link, "source":Source, "label": Label}
                 frame.append(row)
-    
+    #data scraped into csv to train it
     data= pd.DataFrame.from_dict(frame)
     data.to_csv("./data.csv",index=False)
     return frame

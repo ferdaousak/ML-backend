@@ -19,7 +19,8 @@ warnings.filterwarnings('ignore')
 
 #l'entrainement de model
 def train_model():
-    data = pd.read_csv('./input/fake_or_real_news.csv')
+    #our data for training
+    data = pd.read_csv('data.csv')
     x_train, x_test, y_train, y_test = train_test_split(
         data['text'], data['label'], test_size=0.1)
     #pour vectorizer les donneés pour mieux entrainement
